@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  flask-app:
+    image: ghcr.io/devopsvaival/python-flask-sample-app:latest
+    container_name: flask-app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=flaskr
+    volumes:
+      - flask-data:/app/instance
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  flask-data:
